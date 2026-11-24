@@ -1,6 +1,6 @@
 {
   "suite": "security",
-  "ranAt": "2026-11-24T14:43:56.334Z",
+  "ranAt": "2026-11-24T14:45:30.382Z",
   "node": "v24.15.0",
   "rows": [
     {
@@ -125,7 +125,7 @@
       "area": "Secrets",
       "scenario": "Scan source/config for keys, DB URLs, JWT secrets; .env ignored; grep logs for passwords and tokens",
       "expected": "nothing found",
-      "actual": "90 files scanned; secret patterns found in: none; .env files: none; .gitignore has .env=true; passwords/tokens in logs=false",
+      "actual": "91 files scanned; secret patterns found in: none; .env files: none; .gitignore has .env=true; passwords/tokens in logs=false",
       "pass": true,
       "evidence": ""
     },

@@ -57,7 +57,7 @@ Commands come from the module's *Quick Installation Guide: Docker, Git Bash and 
 - [ ] **B5.** Create the first admin. Use your own e-mail and a password of at least 10 characters with letters and digits. It is typed into your shell only and never saved in a file.
   ```bash
   cd services/auth-service
-  USERS_TABLE=PBUsers AWS_ENDPOINT_URL=http://localhost:4566 ADMIN_EMAIL='you@example.com' ADMIN_PASSWORD='ChooseYourOwn123' node scripts/seed-admin.js
+  USERS_TABLE=PBUsers AWS_ENDPOINT_URL=http://localhost:4566 ADMIN_EMAIL='you@example.com' ADMIN_PASSWORD='<your-own-password>' node scripts/seed-admin.js
   cd ../..
   ```
 - [ ] **B6.** Run the smoke test and save the output:
