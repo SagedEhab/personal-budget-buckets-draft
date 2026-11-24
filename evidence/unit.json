@@ -1,0 +1,97 @@
+{
+  "suite": "unit",
+  "ranAt": "2026-11-24T14:43:56.705Z",
+  "node": "v24.15.0",
+  "rows": [
+    {
+      "id": "UT-01",
+      "area": "Buckets",
+      "scenario": "effectiveLimit = 1000 + 200 in - 50 out, spent 500",
+      "expected": "1150, OK",
+      "actual": "1150, OK",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-02",
+      "area": "Buckets",
+      "scenario": "rollover of 1700 unused is capped at 1000",
+      "expected": "rolloverIn 1000",
+      "actual": "rolloverIn 1000",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-03",
+      "area": "Buckets",
+      "scenario": "bucket created this month gets no rollover",
+      "expected": "rolloverIn 0",
+      "actual": "rolloverIn 0",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-04",
+      "area": "Buckets",
+      "scenario": "states at 79%, 80%, 100%, >100%",
+      "expected": "OK, NEAR_LIMIT, NEAR_LIMIT, OVER_LIMIT",
+      "actual": "OK, NEAR_LIMIT, NEAR_LIMIT, OVER_LIMIT",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-05",
+      "area": "Buckets",
+      "scenario": "hard limit: +150 on 900/1000 blocked; editing a 100 expense to 150 allowed",
+      "expected": "false, true",
+      "actual": "false, true",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-06",
+      "area": "Buckets",
+      "scenario": "too much / past month / same bucket / valid",
+      "expected": "INSUFFICIENT_BUDGET, PAST_MONTH, SAME_BUCKET, null",
+      "actual": "INSUFFICIENT_BUDGET, PAST_MONTH, SAME_BUCKET, ",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-07",
+      "area": "Insights",
+      "scenario": "slope of 100,200,300,400; run-rate 300 in 10 of 30 days",
+      "expected": "rising 100; 900",
+      "actual": "rising 100; 900",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-08",
+      "area": "Insights",
+      "scenario": "cell starting with = is prefixed with ' and quoted",
+      "expected": "starts with \"'=",
+      "actual": "\"'=",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-09",
+      "area": "Shared auth",
+      "scenario": "valid / alg none / role changed / expired",
+      "expected": "true, bad_algorithm, bad_signature, expired",
+      "actual": "true, bad_algorithm, bad_signature, expired",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "UT-10",
+      "area": "Shared",
+      "scenario": "mass assignment: extra field \"role\"",
+      "expected": "400 role is not an allowed field.",
+      "actual": "400 role is not an allowed field.",
+      "pass": true,
+      "evidence": ""
+    }
+  ]
+}

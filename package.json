@@ -1,0 +1,12 @@
+{
+  "name": "personal-budget-buckets",
+  "private": true,
+  "description": "26CSCN29H Team 04: Personal Budget Buckets (AI-assisted draft, see README)",
+  "scripts": {
+    "sync": "node scripts/sync-common.js",
+    "dev": "node scripts/dev.js",
+    "test": "node --test --test-concurrency=1 tests/unit.test.js tests/integration.test.js tests/security.test.js tests/lambda.test.js",
+    "evidence": "node scripts/evidence-report.js",
+    "audit": "node scripts/audit.js"
+  }
+}

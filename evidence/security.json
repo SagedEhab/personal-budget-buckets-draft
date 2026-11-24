@@ -1,0 +1,142 @@
+{
+  "suite": "security",
+  "ranAt": "2026-11-24T14:43:56.334Z",
+  "node": "v24.15.0",
+  "rows": [
+    {
+      "id": "ST-01",
+      "area": "Authentication",
+      "scenario": "GET buckets, transactions, dashboard, me with no token",
+      "expected": "401 ×4",
+      "actual": "401 UNAUTHENTICATED, 401 UNAUTHENTICATED, 401 UNAUTHENTICATED, 401 UNAUTHENTICATED",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-02",
+      "area": "Authentication",
+      "scenario": "Admin route with: changed signature, role changed to admin, alg none, garbage",
+      "expected": "401 ×4",
+      "actual": "401 UNAUTHENTICATED, 401 UNAUTHENTICATED, 401 UNAUTHENTICATED, 401 UNAUTHENTICATED",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-03",
+      "area": "Authentication",
+      "scenario": "Correctly signed token that expired 60 s ago",
+      "expected": "401 \"Session expired\"",
+      "actual": "401 UNAUTHENTICATED \"Session expired. Please log in again.\"",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-04",
+      "area": "Authorization",
+      "scenario": "Normal user calls users list, create template, admin overview, transaction stats",
+      "expected": "403 ×4",
+      "actual": "403 FORBIDDEN, 403 FORBIDDEN, 403 FORBIDDEN, 403 FORBIDDEN",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-05",
+      "area": "Ownership (IDOR)",
+      "scenario": "Bob uses Alice's bucket id with GET, PATCH, DELETE",
+      "expected": "404 ×3, Alice's bucket unchanged",
+      "actual": "404 NOT_FOUND, 404 NOT_FOUND, 404 NOT_FOUND; Alice's limit still 900",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-06",
+      "area": "Ownership (IDOR)",
+      "scenario": "Bob reads/deletes Alice's transaction, downloads Alice's report",
+      "expected": "404 ×3",
+      "actual": "404 NOT_FOUND, 404 NOT_FOUND, 404 NOT_FOUND",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-07",
+      "area": "Ownership (cross-service)",
+      "scenario": "Bob logs an expense with Alice's bucketId",
+      "expected": "400 \"not one of your buckets\"",
+      "actual": "400 VALIDATION_ERROR \"bucketId does not refer to one of your buckets.\"",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-08",
+      "area": "Input validation",
+      "scenario": "amount -50; date 2026-02-30; amount \"abc\"; 41-char name; injection-style bucketId; broken JSON",
+      "expected": "400 ×6 with a clear message",
+      "actual": "400 amount must be at least 0.01. | 400 date must be a real date in the format YYYY-MM-DD. | 400 amount must be a number. | 400 name must be at most 40 characters. | 400 bucketId is not valid. | 400 Request body is not valid JSON.",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-09",
+      "area": "Authorization",
+      "scenario": "Register with extra field \"role\":\"admin\"",
+      "expected": "400 \"role is not an allowed field\"",
+      "actual": "400 VALIDATION_ERROR \"role is not an allowed field.\"",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-10",
+      "area": "Authentication",
+      "scenario": "6 wrong passwords for Bob, then the right one; compare unknown-email vs wrong-password errors",
+      "expected": "401 ×5, 429, 429; same message",
+      "actual": "401,401,401,401,401,429; correct password while locked 429 ACCOUNT_LOCKED; unknown e-mail and wrong password give the same message: true",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-11",
+      "area": "Input validation",
+      "scenario": "50 KB JSON body; text/plain body",
+      "expected": "413; 415",
+      "actual": "413 PAYLOAD_TOO_LARGE; 415 UNSUPPORTED_MEDIA_TYPE",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-12",
+      "area": "Secure configuration",
+      "scenario": "Response headers; CORS from allowed vs unknown origin",
+      "expected": "nosniff, DENY, no x-powered-by; CORS only for localhost:8080",
+      "actual": "nosniff=nosniff, frame=DENY, x-powered-by=null; ACAO for allowed origin=http://localhost:8080, for evil origin=null",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-13",
+      "area": "Application",
+      "scenario": "XSS payload in a note; =HYPERLINK formula in a note exported to CSV; frontend code review",
+      "expected": "stored as plain text; CSV cell prefixed with '; no innerHTML in frontend",
+      "actual": "note stored as text \"<img src=x onerror=alert(1)>\"; CSV cell escaped=true; frontend uses innerHTML=false",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-14",
+      "area": "Secrets",
+      "scenario": "Scan source/config for keys, DB URLs, JWT secrets; .env ignored; grep logs for passwords and tokens",
+      "expected": "nothing found",
+      "actual": "90 files scanned; secret patterns found in: none; .env files: none; .gitignore has .env=true; passwords/tokens in logs=false",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "ST-15",
+      "area": "Authentication",
+      "scenario": "Carol's token stays valid, admin disables her account, then re-enables it",
+      "expected": "200; 403 on every service (Auth at once, others within the account-check cache, 60 s on Floci); 200 again",
+      "actual": "before 200; after disable: auth/me 403 FORBIDDEN, 403 FORBIDDEN, 403 FORBIDDEN, 403 FORBIDDEN; after re-enable 200",
+      "pass": true,
+      "evidence": ""
+    }
+  ]
+}

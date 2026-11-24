@@ -1,0 +1,115 @@
+{
+  "suite": "integration",
+  "ranAt": "2026-11-24T14:43:53.861Z",
+  "node": "v24.15.0",
+  "rows": [
+    {
+      "id": "IT-01",
+      "area": "Auth + Insights",
+      "scenario": "Register, log in, open empty dashboard; register same e-mail again",
+      "expected": "201, 200, dashboard 200 expense=0, duplicate 409 EMAIL_TAKEN",
+      "actual": "201, 200, dashboard 200 expense=0, duplicate 409 EMAIL_TAKEN",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-02",
+      "area": "Buckets",
+      "scenario": "Create Food 1000, Fun 2000, Transport 300 (hard limit); duplicate \"food\"; name \"X\" with limit -5",
+      "expected": "201 ×3; dup 409 BUCKET_NAME_TAKEN; invalid 400",
+      "actual": "201, 201, 201; dup 409 BUCKET_NAME_TAKEN; invalid 400 VALIDATION_ERROR",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-03",
+      "area": "Transactions → Buckets",
+      "scenario": "Log 850 EGP in Food (limit 1000, alert 80%); log an expense dated 2099",
+      "expected": "201 NEAR_LIMIT + 1 alert; future 400",
+      "actual": "201 state=NEAR_LIMIT alertRaised=true; alerts=NEAR_LIMIT; future 400 VALIDATION_ERROR",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-04",
+      "area": "Transactions + external API",
+      "scenario": "Log 10 USD in Fun; then currency \"XYZ\"",
+      "expected": "201 with amountBase = 10 × live rate; XYZ 400",
+      "actual": "201 10 USD → 543.31 EGP at 54.330891 (open.er-api.com, Tue, 24 Nov 2026 00:02:31 +0000); XYZ 400 VALIDATION_ERROR",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-05",
+      "area": "Transactions → Buckets",
+      "scenario": "Transport (hard limit 300): 250 then 100",
+      "expected": "201; 422 BUDGET_HARD_LIMIT, nothing saved",
+      "actual": "201; then 422 BUDGET_HARD_LIMIT; transactions in bucket = 1",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-06",
+      "area": "Buckets",
+      "scenario": "Move 200 from Fun to Food; then move 100000",
+      "expected": "201, Food limit 1200; 422 INSUFFICIENT_BUDGET",
+      "actual": "201; Food effectiveLimit=1200 state=OK; Fun had 1456.69 left; 100000 → 422 INSUFFICIENT_BUDGET",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-07",
+      "area": "Buckets ↔ Transactions",
+      "scenario": "Delete Fun (has transactions), archive it, log expense into it; delete an empty bucket",
+      "expected": "409 BUCKET_HAS_TRANSACTIONS; 200 archived; 409 BUCKET_ARCHIVED; 204",
+      "actual": "409 BUCKET_HAS_TRANSACTIONS; archive 200 status=archived; expense 409 BUCKET_ARCHIVED; empty bucket delete 204",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-08",
+      "area": "Transactions → Buckets",
+      "scenario": "Change Groceries 850 → 1300 (Food limit 1200); try to change the date",
+      "expected": "200 OVER_LIMIT; 400",
+      "actual": "200 amount=1300 state=OVER_LIMIT; date change 400 VALIDATION_ERROR",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-09",
+      "area": "Transactions + Insights",
+      "scenario": "Add income 15000; filter by card; compare dashboard to list; 6-month trends; invalid month",
+      "expected": "filter only card; totals equal; 6 months; 400",
+      "actual": "card=2; list expense=2093.31 income=15000; dashboard expense=2093.31 savingsRate=86.04%; trends months=6; month 2026-13 → 400 VALIDATION_ERROR",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-10",
+      "area": "Insights → Transactions/Buckets",
+      "scenario": "Generate transactions + budget CSV, download, delete one",
+      "expected": "201, 201, 200 CSV, 204, 1 left",
+      "actual": "201 rows=4; budget report 201 rows=3; download 200 header \"date,type,amount,currency,amount_EGP,bucket,payment_method,note\"; delete 204; remaining 1",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-11",
+      "area": "Transactions + external API",
+      "scenario": "FX API unreachable while logging 3 KWD",
+      "expected": "503 FX_UNAVAILABLE, nothing saved",
+      "actual": "503 FX_UNAVAILABLE; KWD transaction saved=false",
+      "pass": true,
+      "evidence": ""
+    },
+    {
+      "id": "IT-12",
+      "area": "Auth + Insights (admin)",
+      "scenario": "Admin overview; disable Mona; Mona logs in; admin disables self",
+      "expected": "200; 200; 403; 409; no hashes",
+      "actual": "overview 200 users=2 txns=4; disable 200; login 403 FORBIDDEN; self-disable 409 CANNOT_CHANGE_SELF; hashes exposed=false",
+      "pass": true,
+      "evidence": ""
+    }
+  ]
+}
