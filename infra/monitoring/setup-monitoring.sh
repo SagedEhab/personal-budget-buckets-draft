@@ -26,4 +26,7 @@ aws cloudwatch put-metric-alarm --alarm-name pb-failed-logins-spike --namespace 
 aws cloudwatch put-metric-alarm --alarm-name pb-access-denied-spike --namespace PersonalBudget \
   --metric-name AccessDenied --statistic Sum --period 300 --threshold 10 \
   --comparison-operator GreaterThanOrEqualToThreshold --evaluation-periods 1 --alarm-actions "$TOPIC_ARN"
+aws cloudwatch put-metric-alarm --alarm-name pb-server-errors-spike --namespace PersonalBudget \
+  --metric-name ServerErrors --statistic Sum --period 300 --threshold 5 \
+  --comparison-operator GreaterThanOrEqualToThreshold --evaluation-periods 1 --alarm-actions "$TOPIC_ARN"
 echo "Monitoring configured."

@@ -12,7 +12,9 @@ check() { if [ "$2" = "$3" ]; then echo "PASS $1 ($2)"; PASS=$((PASS+1)); else e
 code() { curl -s -o out.check.body -w '%{http_code}' --max-time 30 "$@"; }
 
 for S in auth buckets transactions insights; do
-  check "GET /api/$S/health on Lambda" "$(code "$API/api/$S/health")" 200
+  # The first call starts a Lambda container on Floci (cold start, can exceed 30 s): retry up to 3 times.
+  for TRY in 1 2 3; do R=$(code "$API/api/$S/health"); [ "$R" = 200 ] && break; echo "     $S: cold start (got $R), retrying"; done
+  check "GET /api/$S/health on Lambda" "$R" 200
   grep -q '"runtime":"lambda"' out.check.body || echo "     note: $S did not report runtime lambda"
 done
 EMAIL="check$(date +%s)@example.com"

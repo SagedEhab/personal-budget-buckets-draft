@@ -1,0 +1,19 @@
+FAIL GET /api/auth/health on Lambda: got 000, expected 200
+grep: out.check.body: No such file or directory
+     note: auth did not report runtime lambda
+FAIL GET /api/buckets/health on Lambda: got 000, expected 200
+grep: out.check.body: No such file or directory
+     note: buckets did not report runtime lambda
+FAIL GET /api/transactions/health on Lambda: got 000, expected 200
+grep: out.check.body: No such file or directory
+     note: transactions did not report runtime lambda
+PASS GET /api/insights/health on Lambda (200)
+PASS POST register (201)
+PASS GET buckets without token -> 401 (401)
+PASS POST bucket (201)
+PASS POST expense (Transactions -> Buckets via Lambda Invoke) (201)
+PASS GET dashboard (Insights -> Transactions + Buckets) (200)
+PASS GET admin users as normal user -> 403 (403)
+PASS Website index.html (200)
+
+Result: 8 passed, 3 failed

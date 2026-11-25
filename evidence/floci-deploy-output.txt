@@ -1,0 +1,42 @@
+1/8 DynamoDB tables (pk + sk, on-demand, encrypted)
+  PBUsers
+  PBBuckets
+  PBTransactions
+  PBReports
+2/8 Secrets Manager: JWT signing key (random, never printed, never in git)
+3/8 SNS topic for budget alerts
+4/8 Private S3 buckets for receipts and reports (Block Public Access + encryption)
+{
+    "TransitionDefaultMinimumObjectSize": "all_storage_classes_128K"
+}
+5/8 One least-privilege IAM role per Lambda
+  pb-auth-role
+  pb-buckets-role
+  pb-transactions-role
+  pb-insights-role
+6/8 Lambda functions (zip without .env)
+
+up to date in 1s
+Created auth-service/lambda.zip (4466 files, 4.2 MB). .env is NOT included.
+  pb-auth-api
+
+up to date in 711ms
+Created buckets-service/lambda.zip (4690 files, 4.5 MB). .env is NOT included.
+  pb-buckets-api
+
+up to date in 1s
+Created transactions-service/lambda.zip (5221 files, 5.2 MB). .env is NOT included.
+  pb-transactions-api
+
+up to date in 487ms
+Created insights-service/lambda.zip (5221 files, 5.2 MB). .env is NOT included.
+  pb-insights-api
+7/8 API Gateway HTTP API: one integration per service, stage throttling
+Tags: Project / Owner / Environment on every resource (governance and cost tracking, Lecture 8)
+  check with: aws resourcegroupstaggingapi get-resources --tag-filters Key=Project,Values=personal-budget-buckets
+8/8 Website on S3 + monitoring
+Monitoring configured.
+
+API:     http://7a84593305.execute-api.localhost.floci.io:4566/api/auth/health
+Website: http://localhost:4566/pb-web/index.html
+Next:    seed the admin (README), then bash infra/check-floci.sh

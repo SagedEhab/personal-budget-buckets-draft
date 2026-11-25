@@ -36,21 +36,29 @@ npm run dev          # http://localhost:8080 (API on :3000), no Docker needed
 npm test             # should show 39 passed
 ```
 
-## 3. Every working session
+## 3. Every working session: commit on your own branch
+
+Course rule (announcement, Nov 2026): **one public team repository, and each member has a branch of
+their own for their commits**. The branches are `saged`, `salma` and `omar`. Work only on yours.
 
 ```bash
-git switch main && git pull                  # start from the latest main
-git switch -c salma/fx-errors                # one short-lived branch per task: <name>/<task>
+git switch salma                             # your own branch (first time: git switch -c salma origin/salma)
+git pull                                     # get your latest work
+git merge origin/main                        # bring in what the others have merged
 # ... edit only your files ...
 npm test                                     # must stay green
 git add -A && git commit -m "Transactions: clearer error when FX API is down"
-git push -u origin salma/fx-errors
+git push
 ```
 
-Then open a **pull request** on GitHub. Another member reviews it, and the `security-checks`
-workflow runs the tests, the dependency scan and the secret scan. Merge it when the checks are green.
+When a piece of work is finished, open a **pull request from your branch into `main`** on GitHub.
+Another member reviews it, and the `security-checks` workflow runs the tests, the dependency scan
+and the secret scan. Merge it when the checks are green. Keep your branch afterwards: its commits
+and pull requests are shown at the discussion.
 
 - Commit **from your own GitHub account**. The commit history is the evidence of your individual work.
+- Each member also needs a **separate personal repository** for proof of individual work (it does
+  not have to be a working project), for example your own service, your tests and your notes.
 - Make small, frequent pull requests, not one big one at the end.
 - Never commit `.env`, passwords, tokens or AWS keys (`.gitignore` already excludes `.env`).
 
@@ -73,9 +81,9 @@ Word files cannot be merged. Keep `Team04-Final-Report` on OneDrive or Google Dr
 
 | When | Saged | Salma | Omar |
 |---|---|---|---|
-| **Tue 24 Nov** | Repo set up (done); install Floci; deploy | Install Docker, AWS CLI, Floci; clone; run and read Transactions | Same, for Insights and Auth |
+| **Tue 24 Nov** | Repo set up (done); Floci installed and deployed, 11/11 checks (done) | Install Docker, AWS CLI, Floci; clone; run and read Transactions | Same, for Insights and Auth |
 | **Wed 25 morning** | Buckets screenshots, IAM, deploy output; report §2, §6, §8 | Transactions screenshots; §3.2, §5 | Insights + CloudWatch screenshots; §3.3, §11 |
-| **Wed 25 afternoon** | Merge all PRs; record the ≤5-min video; final report check | Contribution statement | Contribution statement |
+| **Wed 25 afternoon** | Personal proof-of-work repo; merge all PRs; record the ≤5-min video; final report check | Personal repo; contribution statement | Personal repo; contribution statement |
 | **Wed 25, before 23:59** | Submit on Moodle together | | |
 
 Open questions for the team are in the report's "Changes since the Phase 1 proposal" section
